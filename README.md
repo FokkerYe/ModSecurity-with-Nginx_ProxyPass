@@ -146,6 +146,10 @@ ModSecurity + OWASP CRS should inspect all requests
 
 SSL is enabled and auto-renews
 
+Final Result :
+![final](final.PNG)
+
+
 
 
 
