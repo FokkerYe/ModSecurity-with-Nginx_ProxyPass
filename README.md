@@ -138,7 +138,7 @@ sudo systemctl reload nginx
 ```
 Open browser: https://modsec.ayk.beauty/
 
-Traffic should proxy to Tomcat at 172.190.51.63:8080
+Traffic should proxy to Tomcat at 189.190.50.64:8080
 
 ModSecurity + OWASP CRS should inspect all requests
 
