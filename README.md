@@ -232,6 +232,13 @@ nginx -t
 systemctl reload nginx
 ```
 
+### only one ip allow rule
+
+```
+SecRule REMOTE_ADDR "!@ipMatch 192.168.100.5" \
+    "id:1013,phase:1,deny,status:403,msg:'Only Allowed IPs can access'"
+```
+
 
 
 
