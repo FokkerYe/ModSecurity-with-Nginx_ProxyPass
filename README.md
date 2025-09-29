@@ -184,6 +184,8 @@ msg:'Blocking IP 103.101.15.218': A custom message that will be logged.
 
 severity:2: The severity level for the rule.
 ```
+Result: 
+![block](block.PNG)
 
 
 
