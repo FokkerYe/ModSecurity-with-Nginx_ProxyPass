@@ -187,6 +187,53 @@ severity:2: The severity level for the rule.
 Result: 
 ![block](block.PNG)
 
+## How to customize Rule create ip blocking and SQL Injection Protection
+
+Step 1: Create the modsecurity Directory
+```
+sudo mkdir /etc/nginx/modsecurity
+```
+ Step 2: Create Custom Rules File
+ ```
+sudo nano /etc/nginx/modsecurity/custom-rules.conf
+````
+Paste the following rules inside:
+
+```
+# Block basic SQL Injection
+SecRule ARGS "@rx select.+from|union.+select|insert.+into|drop.+table" \
+    "id:20001,phase:2,deny,status:403,msg:'SQL Injection Detected'"
+
+# Block basic XSS
+SecRule ARGS|REQUEST_HEADERS|XML:/* "@rx <script>|javascript:|onerror=|onload=" \
+    "id:20002,phase:2,deny,status:403,msg:'XSS Attack Detected'"
+
+
+# SecRule REMOTE_ADDR "@ipMatch 103.101.15.218" \
+    "id:1001,deny,status:403,msg:'Blocking IP 103.101.15.218',severity:2"
+
+```
+Save and exit: Ctrl + O, Enter, Ctrl + X ⚙️ Step 3: Include Custom Rule File in Main Configuration
+
+Edit the main ModSecurity configuration:
+```
+sudo nano /etc/nginx/modsecurity.conf
+
+
+```
+ ## Alternatively, to include all rules from a folder:
+```
+Include /etc/nginx/modsecurity/*.conf
+```
+
+Step 4: Test Nginx Configuration
+```
+nginx -t
+systemctl reload nginx
+```
+
+
+
 
 
 
