@@ -149,6 +149,43 @@ SSL is enabled and auto-renews
 Final Result :
 ![final](final.PNG)
 
+Testing :
+To block the IP address 103.101.15.218 using ModSecurity, follow these steps: Step-by-Step Instructions:
+
+Edit the ModSecurity Configuration File:
+
+    The ModSecurity configuration file is typically located at /etc/nginx/modsecurity.conf. Open this file in a text editor.
+```
+sudo nano /etc/nginx/modsecurity.conf
+```
+Add the IP Blocking Rule:
+Add the following rule to block the IP 103.101.15.218. Place it anywhere in the file (ideally in a section where you're managing custom rules, like at the end of the file).
+```
+SecRule REMOTE_ADDR "@ipMatch 103.101.15.218" \
+    "id:1001,deny,status:403,msg:'Blocking IP 103.101.15.218',severity:2"
+```
+Explanation:
+```
+SecRule: The ModSecurity rule directive.
+
+REMOTE_ADDR: Refers to the client's IP address.
+
+@ipMatch: The operator to match the specified IP.
+
+103.101.15.218: The IP address you want to block.
+
+id:1001: A unique rule ID. Ensure this number is not used elsewhere.
+
+deny: The action to take, which is to deny the request.
+
+status:403: The HTTP response status code for forbidden access.
+
+msg:'Blocking IP 103.101.15.218': A custom message that will be logged.
+
+severity:2: The severity level for the rule.
+```
+
+
 
 
 
