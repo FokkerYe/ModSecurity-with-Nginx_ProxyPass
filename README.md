@@ -304,15 +304,19 @@ SSL & Certbot
 HTTPS certificates stored in /etc/letsencrypt/
 
 Auto-renewal enabled → certbot renew --dry-run
-Flow Flow main working process
+###  request Flow main working process
 
 ```
 Client → Nginx (modsec.ayk.beauty) → ModSecurity Module → Custom Rules
        │
        └── Reverse Proxy → Tomcat (189.190.50.64:8080)
 ```
+Description:
+Client request → Nginx receive → ModSecurity inspect → Allow/Block → Proxy to backend
 
-Key Points
+SSL handled at Nginx → HTTPS → Auto-renew
+
+Key Points:
 
 nginx.conf loads module.
 
