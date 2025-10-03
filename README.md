@@ -259,6 +259,51 @@ ModSecurity + Nginx File Architecture Flow
 /etc/nginx/modsecurity/        → Custom ModSecurity rules folder
     └─ custom-rules.conf      → Custom rules (SQLi, XSS, IP blocking)
 ```
+
+
+Flow Explanation
+
+Nginx Main Configuration (nginx.conf)
+
+Loads Nginx modules (load_module ...)
+
+Server blocks defined in /etc/nginx/sites-available/ and enabled via symlinks in /etc/nginx/sites-enabled/
+
+Server Configuration (modsec.ayk.beauty)
+
+Listens on port 80
+
+Reverse proxy → proxy_pass http://189.190.50.64:8080/;
+
+ModSecurity enabled and rules assigned → modsecurity_rules_file /etc/nginx/modsecurity.conf;
+
+ModSecurity Core Config (modsecurity.conf)
+
+Contains OWASP ModSecurity default rules
+
+Custom rules can be included via Include /etc/nginx/modsecurity/*.conf
+
+Custom Rules (custom-rules.conf)
+
+Defines SQL Injection, XSS, and IP blocking rules
+
+Example:
+
+Block IP → SecRule REMOTE_ADDR "@ipMatch 103.101.15.218"
+
+SQLi block → SecRule ARGS "@rx select.+from|union.+select|insert.+into|drop.+table"
+
+Modules (modules-enabled/ngx_http_modsecurity_module.so)
+
+ModSecurity module copied into Nginx module directory
+
+Nginx rebuilt and dynamic module loaded
+
+SSL & Certbot
+
+HTTPS certificates stored in /etc/letsencrypt/
+
+Auto-renewal enabled → certbot renew --dry-run
 Flow Flow main working process
 
 ```
