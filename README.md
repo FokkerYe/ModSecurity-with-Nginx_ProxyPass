@@ -238,6 +238,34 @@ systemctl reload nginx
 SecRule REMOTE_ADDR "!@ipMatch 192.168.100.5" \
     "id:1013,phase:1,deny,status:403,msg:'Only Allowed IPs can access'"
 ```
+ModSecurity + Nginx File Architecture Flow
+```
+/etc/nginx/                → Nginx main configuration folder
+├─ nginx.conf              → Main Nginx configuration file
+│   └─ load_module /etc/nginx/modules-enabled/ngx_http_modsecurity_module.so;
+│
+├─ modules-enabled/
+│   └─ ngx_http_modsecurity_module.so   → ModSecurity Nginx module
+│
+├─ sites-available/
+│   └─ modsec.ayk.beauty   → Site-specific config with reverse proxy + ModSecurity
+│
+├─ sites-enabled/
+│   └─ modsec.ayk.beauty → symlink to sites-available
+│   └─ default.bak       → Backup of default site
+│
+/etc/nginx/modsecurity.conf    → Main ModSecurity configuration
+/etc/nginx/unicode.mapping     → Unicode mapping for ModSecurity
+/etc/nginx/modsecurity/        → Custom ModSecurity rules folder
+    └─ custom-rules.conf      → Custom rules (SQLi, XSS, IP blocking)
+```
+Flow Flow main working process
+
+```
+Client → Nginx (modsec.ayk.beauty) → ModSecurity Module → Custom Rules
+       │
+       └── Reverse Proxy → Tomcat (189.190.50.64:8080)
+```
 
 
 
