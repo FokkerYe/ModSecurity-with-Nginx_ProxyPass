@@ -267,7 +267,19 @@ Client → Nginx (modsec.ayk.beauty) → ModSecurity Module → Custom Rules
        └── Reverse Proxy → Tomcat (189.190.50.64:8080)
 ```
 
+Key Points
 
+nginx.conf loads module.
+
+sites-available holds server configs.
+
+modsecurity.conf is the core rules config.
+
+/modsecurity/*.conf holds your custom rules.
+
+Reverse proxy setup ensures traffic goes to backend.
+
+Only IP allow/block rules are flexible via SecRule REMOTE_ADDR
 
 
 
