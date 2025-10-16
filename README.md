@@ -103,7 +103,7 @@ server {
     modsecurity_rules_file /etc/nginx/modsecurity.conf;
 
     location / {
-        proxy_pass http://189.190.50.64:8080/;
+        proxy_pass http://your_backend_ip:8080/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -140,7 +140,7 @@ sudo systemctl reload nginx
 ```
 Open browser: https://modsec.ayk.beauty/
 
-Traffic should proxy to Tomcat at 189.190.50.64:8080
+Traffic should proxy to Tomcat at your_backend_ip:8080
 
 ModSecurity + OWASP CRS should inspect all requests
 
@@ -150,7 +150,7 @@ Final Result :
 ![final](final.PNG)
 
 Testing :
-To block the IP address 103.101.15.218 using ModSecurity, follow these steps: Step-by-Step Instructions:
+To block the IP address 109.110.15.218 using ModSecurity, follow these steps: Step-by-Step Instructions:
 
 Edit the ModSecurity Configuration File:
 
@@ -159,10 +159,10 @@ Edit the ModSecurity Configuration File:
 sudo nano /etc/nginx/modsecurity.conf
 ```
 Add the IP Blocking Rule:
-Add the following rule to block the IP 103.101.15.218. Place it anywhere in the file (ideally in a section where you're managing custom rules, like at the end of the file).
+Add the following rule to block the IP 109.110.15.218. Place it anywhere in the file (ideally in a section where you're managing custom rules, like at the end of the file).
 ```
-SecRule REMOTE_ADDR "@ipMatch 103.101.15.218" \
-    "id:1001,deny,status:403,msg:'Blocking IP 103.101.15.218',severity:2"
+SecRule REMOTE_ADDR "@ipMatch 109.110.15.218" \
+    "id:1001,deny,status:403,msg:'Blocking IP109.110.15.2188',severity:2"
 ```
 Explanation:
 ```
@@ -180,7 +180,7 @@ deny: The action to take, which is to deny the request.
 
 status:403: The HTTP response status code for forbidden access.
 
-msg:'Blocking IP 103.101.15.218': A custom message that will be logged.
+msg:'Blocking IP 109.110.15.218': A custom message that will be logged.
 
 severity:2: The severity level for the rule.
 ```
@@ -209,8 +209,8 @@ SecRule ARGS|REQUEST_HEADERS|XML:/* "@rx <script>|javascript:|onerror=|onload=" 
     "id:20002,phase:2,deny,status:403,msg:'XSS Attack Detected'"
 
 
-# SecRule REMOTE_ADDR "@ipMatch 103.101.15.218" \
-    "id:1001,deny,status:403,msg:'Blocking IP 103.101.15.218',severity:2"
+# SecRule REMOTE_ADDR "@ipMatch 109.110.15.218" \
+    "id:1001,deny,status:403,msg:'Blocking IP 109.110.15.218',severity:2"
 
 ```
 Save and exit: Ctrl + O, Enter, Ctrl + X ⚙️ Step 3: Include Custom Rule File in Main Configuration
@@ -273,7 +273,7 @@ Server Configuration (modsec.ayk.beauty)
 
 Listens on port 80
 
-Reverse proxy → proxy_pass http://189.190.50.64:8080/;
+Reverse proxy → proxy_pass http://your_backend_ip:8080/;
 
 ModSecurity enabled and rules assigned → modsecurity_rules_file /etc/nginx/modsecurity.conf;
 
@@ -289,7 +289,7 @@ Defines SQL Injection, XSS, and IP blocking rules
 
 Example:
 
-Block IP → SecRule REMOTE_ADDR "@ipMatch 103.101.15.218"
+Block IP → SecRule REMOTE_ADDR "@ipMatch 109.110.15.218"
 
 SQLi block → SecRule ARGS "@rx select.+from|union.+select|insert.+into|drop.+table"
 
@@ -309,7 +309,7 @@ Auto-renewal enabled → certbot renew --dry-run
 ```
 Client → Nginx (modsec.ayk.beauty) → ModSecurity Module → Custom Rules
        │
-       └── Reverse Proxy → Tomcat (189.190.50.64:8080)
+       └── Reverse Proxy → Tomcat (your_backend_ip:8080)
 ```
 Description:
 Client request → Nginx receive → ModSecurity inspect → Allow/Block → Proxy to backend
